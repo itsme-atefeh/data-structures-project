@@ -52,7 +52,10 @@ private:
 
 public:
     Hospital(int);
-    void set_Patients(int, int, int, int);
+    void set_Patients_fcfs(int, int, int, int);
+    void set_Patients_sjf(int, int, int, int);
+    void set_Patients_ps(int, int, int, int);
+
     void FirstComeFirstServed();
     void priority_scheduling();
     void SJF();

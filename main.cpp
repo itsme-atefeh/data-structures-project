@@ -26,13 +26,13 @@ int main()
         cout << "📋 patients death time >>> ";
         cin >> death_time;
         cout << "------------------------------------------------------------" << endl;
-        hospital.set_Patients(patient_num, enter_time, proccess_time, death_time);
+        hospital.set_Patients_fcfs(patient_num, enter_time, proccess_time, death_time);
     }
-    // hospital.set_Patients(1, 0, 3, 10);
-    // hospital.set_Patients(2, 0, 3, 7);
-    // hospital.set_Patients(3, 1, 2, 5);
-    // hospital.set_Patients(4, 1, 5, 11);
-    // hospital.set_Patients(5, 2, 3, 6);
+    // hospital.set_Patients_fcfs(1, 0, 3, 10);
+    // hospital.set_Patients_fcfs(2, 0, 3, 7);
+    // hospital.set_Patients_fcfs(3, 1, 2, 5);
+    // hospital.set_Patients_fcfs(4, 1, 5, 11);
+    // hospital.set_Patients_fcfs(5, 2, 3, 6);
 
     hospital.FirstComeFirstServed();
 

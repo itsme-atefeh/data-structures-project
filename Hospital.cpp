@@ -16,10 +16,22 @@ Hospital::Hospital(int bed_num)
     clock = 0;
 }
 
-void Hospital::set_Patients(int patient_num, int enter_time, int proccess_time, int death_time)
+void Hospital::set_Patients_fcfs(int patient_num, int enter_time, int proccess_time, int death_time)
 {
     Patient *patient = new Patient(patient_num, enter_time, proccess_time, death_time);
     waiting_line.push(patient);
+}
+
+void Hospital::set_Patients_sjf(int patient_num, int enter_time, int proccess_time, int death_time)
+{
+    Patient *patient = new Patient(patient_num, enter_time, proccess_time, death_time);
+    sjfQueue.push(patient);
+}
+
+void Hospital::set_Patients_ps(int patient_num, int enter_time, int proccess_time, int death_time)
+{
+    Patient *patient = new Patient(patient_num, enter_time, proccess_time, death_time);
+    psQueue.push(patient);
 }
 
 void Hospital::FirstComeFirstServed()
@@ -95,8 +107,8 @@ void Hospital::FirstComeFirstServed()
 
 void Hospital::SJF()
 {
-    int patients_n = waiting_line.size();
-    while (!waiting_line.empty() || full_bed() || !sjfQueue.empty())
+    int patients_n = sjfQueue.size();
+    while (!sjfQueue.empty() || full_bed())
     {
         if (!sjfQueue.empty() && available_bed())
         {
@@ -111,12 +123,6 @@ void Hospital::SJF()
             // waiting_line.push(temp);
             // cout << " a patient got bed " << temp->get_bed_number() << endl;
         }
-        else if (!waiting_line.empty())
-        {
-            waiting_line.front()->set_insert(clock);
-            sjfQueue.push(waiting_line.front());
-            waiting_line.pop();
-        }
         for (size_t i = 0; i < bed_num; i++)
         {
             // cout << "  time elapsed   " << clock - beds[i].get_patient()->get_insert() << endl;
@@ -130,15 +136,15 @@ void Hospital::SJF()
                      << beds[i].get_patient()->get_bed_number() << endl;
                 delete beds[i].get_patient();
 
-                if (!waiting_line.empty() && available_bed())
+                if (!sjfQueue.empty() && available_bed())
                 {
                     int i = number_available_bed();
                     beds[i].set_empty(false);
-                    Patient *temp = waiting_line.front();
+                    Patient *temp = sjfQueue.top();
                     beds[i].set_patient(temp);
                     temp->set_insert(clock);
                     temp->set_bed_number(i);
-                    waiting_line.pop();
+                    sjfQueue.pop();
                     time_left += clock - temp->enter_time;
                     // waiting_line.push(temp);
                     // cout << " a patient got bed " << temp->get_bed_number() << endl;
@@ -171,8 +177,8 @@ void Hospital::SJF()
 
 void Hospital::priority_scheduling()
 {
-    int patients_n = waiting_line.size();
-    while (!waiting_line.empty() || full_bed() || !psQueue.empty())
+    int patients_n = psQueue.size();
+    while (full_bed() || !psQueue.empty())
     {
         if (!psQueue.empty() && available_bed())
         {
@@ -187,12 +193,6 @@ void Hospital::priority_scheduling()
             // waiting_line.push(temp);
             // cout << " a patient got bed " << temp->get_bed_number() << endl;
         }
-        else if (!waiting_line.empty())
-        {
-            waiting_line.front()->set_insert(clock);
-            psQueue.push(waiting_line.front());
-            waiting_line.pop();
-        }
         for (size_t i = 0; i < bed_num; i++)
         {
             // cout << "  time elapsed   " << clock - beds[i].get_patient()->get_insert() << endl;
@@ -206,15 +206,15 @@ void Hospital::priority_scheduling()
                      << beds[i].get_patient()->get_bed_number() << endl;
                 delete beds[i].get_patient();
 
-                if (!waiting_line.empty() && available_bed())
+                if (!psQueue.empty() && available_bed())
                 {
                     int i = number_available_bed();
                     beds[i].set_empty(false);
-                    Patient *temp = waiting_line.front();
+                    Patient *temp = psQueue.top();
                     beds[i].set_patient(temp);
                     temp->set_insert(clock);
                     temp->set_bed_number(i);
-                    waiting_line.pop();
+                    psQueue.pop();
                     time_left += clock - temp->enter_time;
                     // waiting_line.push(temp);
                     // cout << " a patient got bed " << temp->get_bed_number() << endl;
